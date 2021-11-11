@@ -5,6 +5,12 @@
  */
 package com.mirzayogy.pbo2.asi.frame.admin;
 
+import com.mirzayogy.pbo2.asi.model.JenisBarang;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
 /**
  *
  * @author mirza
@@ -29,11 +35,11 @@ public class JenisBarangViewFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        tfCari = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tbJenisbarang = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
@@ -41,26 +47,36 @@ public class JenisBarangViewFrame extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         jLabel1.setText("Cari Jenis Barang");
 
         jButton1.setText("Cari");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
         jLabel2.setText("Data Jenis Barang");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tbJenisbarang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Id", "Nama Jenis Barang"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tbJenisbarang);
+        if (tbJenisbarang.getColumnModel().getColumnCount() > 0) {
+            tbJenisbarang.getColumnModel().getColumn(0).setMaxWidth(200);
+        }
 
         jButton2.setText("Tambah");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -79,6 +95,11 @@ public class JenisBarangViewFrame extends javax.swing.JFrame {
         jButton4.setText("Hapus");
 
         jButton5.setText("Batal");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jButton6.setText("Tutup");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
@@ -98,7 +119,7 @@ public class JenisBarangViewFrame extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField1)
+                        .addComponent(tfCari)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1))
                     .addGroup(layout.createSequentialGroup()
@@ -125,7 +146,7 @@ public class JenisBarangViewFrame extends javax.swing.JFrame {
                 .addGap(38, 38, 38)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -150,14 +171,70 @@ public class JenisBarangViewFrame extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         JenisBarangAddFrame jenisBarangAddFrame = new JenisBarangAddFrame();
+        jenisBarangAddFrame.status = "TAMBAH";
         jenisBarangAddFrame.setVisible(true);
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        JenisBarangAddFrame jenisBarangAddFrame = new JenisBarangAddFrame();
-        jenisBarangAddFrame.setVisible(true);
+        
+        int barisTerpilih = tbJenisbarang.getSelectedRow();
+        
+        if(barisTerpilih >= 0){
+            
+            TableModel model = tbJenisbarang.getModel();
+            
+            JenisBarang jenisBarang = new JenisBarang();
+            jenisBarang.setId(Integer.parseInt(model.getValueAt(barisTerpilih, 0).toString()));
+            jenisBarang.setNamajenisbarang(model.getValueAt(barisTerpilih, 1).toString());
+            
+            JenisBarangAddFrame jenisBarangAddFrame = new JenisBarangAddFrame(jenisBarang);
+            jenisBarangAddFrame.status = "UBAH";
+
+            jenisBarangAddFrame.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Pilih dulu datanya");
+        }
+        
+        
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        JenisBarang jenisBarang = new JenisBarang();
+        ArrayList<JenisBarang> list = jenisBarang.read();
+        
+        tampilkanData(list);
+    }//GEN-LAST:event_formWindowActivated
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        JenisBarang jenisBarang = new JenisBarang();
+        ArrayList<JenisBarang> list = jenisBarang.search(tfCari.getText());
+        
+        tampilkanData(list);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        JenisBarang jenisBarang = new JenisBarang();
+        ArrayList<JenisBarang> list = jenisBarang.read();
+        
+        tampilkanData(list);
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    public void tampilkanData(ArrayList<JenisBarang> list){
+        DefaultTableModel model = (DefaultTableModel) tbJenisbarang.getModel();
+        
+        Object[] row = new Object[2];
+        model.setRowCount(0);
+        
+        if(list.size() > 0){
+           for (int i = 0; i < list.size(); i++) {
+            row[0] = list.get(i).getId();
+            row[1] = list.get(i).getNamajenisbarang();
+            
+            model.addRow(row);
+            } 
+        }
+    }
     /**
      * @param args the command line arguments
      */
@@ -203,7 +280,7 @@ public class JenisBarangViewFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable tbJenisbarang;
+    private javax.swing.JTextField tfCari;
     // End of variables declaration//GEN-END:variables
 }

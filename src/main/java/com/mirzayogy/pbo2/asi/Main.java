@@ -1,6 +1,7 @@
 package com.mirzayogy.pbo2.asi;
 
 import com.mirzayogy.pbo2.asi.frame.LoginFrame;
+import com.mirzayogy.pbo2.asi.frame.admin.JenisBarangViewFrame;
 import com.mirzayogy.pbo2.asi.model.JenisBarang;
 import java.util.ArrayList;
 
@@ -44,12 +45,15 @@ public class Main {
 //            System.out.println(list.get(i).getNamajenisbarang());
 //        }
 
-          jenisBarang.setId(2);
-          if(jenisBarang.find()){
-              System.out.println(jenisBarang.getId());
-              System.out.println(jenisBarang.getNamajenisbarang());
-          } else {
-            System.out.println("Data tidak ditemukan");
-          }
+//          jenisBarang.setId(2);
+//          if(jenisBarang.find()){
+//              System.out.println(jenisBarang.getId());
+//              System.out.println(jenisBarang.getNamajenisbarang());
+//          } else {
+//            System.out.println("Data tidak ditemukan");
+//          }
+
+        JenisBarangViewFrame jenisBarangViewFrame = new JenisBarangViewFrame();
+        jenisBarangViewFrame.setVisible(true);
     }
 }
